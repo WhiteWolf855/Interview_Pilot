@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Interview Pilot</string>
+    <string name="title_activity_main">Interview Pilot</string>
+    <string name="package_name">com.brojekt.intas</string>
+    <string name="custom_url_scheme">com.brojekt.intas</string>
+</resources>
