@@ -319,6 +319,18 @@ describe("privacy and transport", () => {
   it("reports health without exposing configuration", async () => {
     const response = await healthRoute(new Request(`${BASE}/api/health`));
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ ok: true, mock: true });
+    expect(await response.json()).toEqual({ ok: true, mock: true, limits: "memory" });
+  });
+
+  it("reports a shared limit store under either variable naming", async () => {
+    for (const [url, token] of [["UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"], ["KV_REST_API_URL", "KV_REST_API_TOKEN"]] as const) {
+      vi.stubEnv(url, "https://example.upstash.test");
+      vi.stubEnv(token, "token-value");
+      const body = (await (await healthRoute(new Request(`${BASE}/api/health`))).json()) as Record<string, unknown>;
+      expect(body.limits).toBe("shared");
+      expect(JSON.stringify(body)).not.toContain("token-value");
+      vi.unstubAllEnvs();
+      vi.stubEnv("AI_PROVIDER", "mock");
+    }
   });
 });

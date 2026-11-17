@@ -64,7 +64,7 @@ Only names starting with `NEXT_PUBLIC_` reach the browser or the app. Everything
 | `RATE_PLAN_PER_MINUTE` / `RATE_FOLLOWUP_PER_MINUTE` / `RATE_GRADE_PER_MINUTE` | No | `3` / `30` / `10` | Burst limits per visitor address. |
 | `MAX_FOLLOWUPS_PER_INTERVIEW` / `MAX_GRADES_PER_INTERVIEW` | No | `60` / `40` | Caps per interview, including reruns. |
 | `CLIENT_IP_HEADER` | No | `x-forwarded-for` | The header your host puts the visitor's address in. |
-| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | On serverless hosts | | Shared store for the limits above. |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | On serverless hosts | | Shared store for the limits above. `KV_REST_API_URL` / `KV_REST_API_TOKEN` (the names Vercel's Upstash integration may use) also work. |
 | `ALLOWED_ORIGINS` | No | `https://localhost,capacitor://localhost` | Other origins allowed to call the API. The default covers the Android app. |
 | `NEXT_PUBLIC_API_BASE_URL` | For the Android build | | Public HTTPS address of the deployed backend. |
 | `AI_PROVIDER` | No | | `mock` for development without a key. |
@@ -138,8 +138,10 @@ single server process you do not need Upstash. Set the same environment variable
 
 ### After deploying
 
-Open `https://your-domain/api/health`. It returns `{"ok":true,"mock":false}` when the API
-key is present. Then run one interview yourself.
+Open `https://your-domain/api/health`. It should return
+`{"ok":true,"mock":false,"limits":"shared"}`. `ok` means the API key is present; `limits`
+says `shared` when the Upstash store is connected and `memory` when it is not. Then run one
+interview yourself.
 
 ## Build the Android app
 

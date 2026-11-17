@@ -34,8 +34,9 @@ export function serverEnv() {
     gradePerMinute: int("RATE_GRADE_PER_MINUTE", 10),
     followUpsPerInterview: int("MAX_FOLLOWUPS_PER_INTERVIEW", 60),
     gradesPerInterview: int("MAX_GRADES_PER_INTERVIEW", 40),
-    upstashUrl: process.env.UPSTASH_REDIS_REST_URL || "",
-    upstashToken: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+    // Vercel's Upstash integration may name these KV_REST_API_URL and KV_REST_API_TOKEN, so both are accepted.
+    upstashUrl: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "",
+    upstashToken: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "",
     allowedOrigins: (process.env.ALLOWED_ORIGINS || "https://localhost,capacitor://localhost")
       .split(",")
       .map((origin) => origin.trim())
